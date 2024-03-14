@@ -1,10 +1,11 @@
 // ContactForm.js
 import { Formik, Form, Field } from 'formik';
+import { useId } from 'react';
 import { nanoid } from 'nanoid';
 import css from './ContactForm.module.css';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
+import { addContact } from '../../redux/operations';
 
 const validationSchema = Yup.object().shape({
   text: Yup.string()
@@ -17,55 +18,54 @@ const validationSchema = Yup.object().shape({
     .max(50, 'Phone number must be less than 50 characters'),
 });
 
+
 export default function ContactForm() {
+  const nameId = useId();
+  const phoneId = useId();
   const dispatch = useDispatch();
 
-  const handleSubmit = (values, actions) => {
-    const newContact = {
-      id: nanoid(),
-      text: values.text,
-      phone: values.phone,
-    };
+  const initialValues = {
+    text: '',
+    phone: '',
+  };
 
-    dispatch(addContact(newContact));
-    actions.resetForm();
+  const handleSubmit = (values, { resetForm }) => {
+      const newContact = { ...values, id: nanoid() };
+      dispatch(addContact(newContact));
+      resetForm();
   };
 
   return (
     <div className={css.formBlock}>
       <h2>Add New Contact</h2>
       <Formik
-        initialValues={{ text: '', phone: '' }}
+        initialValues={initialValues}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        {({ values, handleChange, handleBlur }) => (
+        
           <Form className={css.form}>
-            <label htmlFor="text">Name</label>
+            <label htmlFor={nameId}>Name</label>
             <Field
               type="text"
               name="text"
-              value={values.text}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              id={nameId}
             />
 
             <br />
 
-            <label htmlFor="phone">Number</label>
+            <label htmlFor={phoneId}>Number</label>
             <Field
               type="text"
               name="phone"
-              value={values.phone}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              id={phoneId}
             />
 
             <br />
 
             <button type="submit">Add</button>
           </Form>
-        )}
+       
       </Formik>
     </div>
   );

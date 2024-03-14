@@ -1,6 +1,6 @@
 import css from './Contact.module.css'
 import { useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/contactsSlice';
+import { deleteContact } from '../../redux/operations';
 
 export default function Contact({ contact }) {
     
@@ -9,6 +9,7 @@ export default function Contact({ contact }) {
     const handleDelete = () => dispatch(deleteContact(contact.id));
   
     return (
+        <li>
         <div className={css.contactBlock}>
             
             <ul>
@@ -18,6 +19,7 @@ export default function Contact({ contact }) {
 
             <button onClick={handleDelete} className={css.deleteButton}>Delete</button>
         </div>
+        </li>
     )
 
     

@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterNumbers } from '../../redux/filtersSlice';
-
+import { selectFilters } from '../../redux/selectors';
 
 export default function SearchBox() {
   const searchId = useId();
@@ -9,7 +9,7 @@ export default function SearchBox() {
   const handleFilterChange = e =>
     dispatch(filterNumbers(e.target.value.trim()));
 
-  const value = useSelector(state => state.filters);
+  const value = useSelector(selectFilters);
   return (
     <div>
       <label htmlFor={searchId}>Find contacts by name</label>
